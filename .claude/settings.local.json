@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python api.py:*)",
+      "Bash(start \"\" \"c:\\\\Users\\\\computer\\\\Desktop\\\\phyton\\\\23-12-25 newProject\\\\pro nu.2\\\\index.html\")",
+      "Bash(cmd.exe /c start \"\" \"c:\\\\Users\\\\computer\\\\Desktop\\\\phyton\\\\23-12-25 newProject\\\\pro nu.2\\\\index.html\")",
+      "Bash(python -c:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)"
+    ]
+  }
+}
