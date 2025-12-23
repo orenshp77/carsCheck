@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0a0f1e" />
+  <title>Car Price Predictor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    :root {
+      font-family: 'Heebo', system-ui, Arial;
+      font-weight: 600;
+      --accent: #00d4aa;
+      --accent-glow: rgba(0, 212, 170, 0.4);
+      --purple: #a855f7;
+      --blue: #3b82f6;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(ellipse 150% 80% at 50% -20%, rgba(59, 130, 246, 0.15), transparent 50%),
+        radial-gradient(ellipse 100% 60% at 100% 100%, rgba(168, 85, 247, 0.12), transparent 50%),
+        linear-gradient(180deg, #0a0f1e 0%, #0d1424 100%);
+      color: #f1f5f9;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .app-header {
+      padding: 20px 24px;
+      padding-top: max(20px, env(safe-area-inset-top));
+      background: rgba(10, 15, 30, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+    .app-title {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 30%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .badge {
+      padding: 10px 16px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(0, 212, 170, 0.1);
+      border: 1px solid rgba(0, 212, 170, 0.3);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 24px 20px;
+      padding-bottom: max(24px, env(safe-area-inset-bottom));
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Result Card */
+    .result-card {
+      background: linear-gradient(135deg, rgba(0, 212, 170, 0.12), rgba(168, 85, 247, 0.08));
+      border: 1px solid rgba(0, 212, 170, 0.2);
+      border-radius: 24px;
+      padding: 28px 24px;
+      text-align: center;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .result-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+      opacity: 0.3;
+      animation: shimmer 8s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(20%, 20%); }
+    }
+    .result-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 8px;
+      position: relative;
+    }
+    .result-price {
+      font-size: 52px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      line-height: 1.1;
+    }
+
+    /* Form Section */
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title span {
+      font-size: 20px;
+    }
+
+    .form-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 24px 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .field.full {
+      grid-column: 1 / -1;
+    }
+    .field-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* Custom Range Slider */
+    .range-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .range-display {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent);
+      text-align: center;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 4px 15px var(--accent-glow);
+      border: 3px solid #fff;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 4px 15px var(--accent-glow);
+      border: 3px solid #fff;
+    }
+
+    /* Inputs & Selects */
+    input[type="number"], select {
+      width: 100%;
+      padding: 16px 18px;
+      font-size: 17px;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: 16px;
+      border: 2px solid rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.3);
+      color: #fff;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    input[type="number"]:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-glow);
+    }
+    select {
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: left 14px center;
+      background-size: 20px;
+      padding-left: 44px;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+      width: 100%;
+      padding: 20px;
+      font-size: 20px;
+      font-weight: 800;
+      font-family: inherit;
+      border: none;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--accent), var(--blue));
+      color: #0a0f1e;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 8px 30px var(--accent-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .submit-btn:active {
+      transform: scale(0.98);
+    }
+    .submit-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    .spin {
+      width: 22px;
+      height: 22px;
+      border: 3px solid rgba(0,0,0,0.2);
+      border-top-color: #0a0f1e;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Similar Cars */
+    .similar-section {
+      margin-top: 28px;
+    }
+    .car-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+    .car-card:active {
+      background: rgba(255,255,255,0.08);
+      transform: scale(0.99);
+    }
+    .car-info h3 {
+      margin: 0 0 6px 0;
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .car-meta {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      font-weight: 500;
+    }
+    .car-price {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    /* Log (hidden on mobile by default) */
+    .log-section {
+      margin-top: 20px;
+    }
+    .log-toggle {
+      width: 100%;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.7);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .log-content {
+      display: none;
+      margin-top: 12px;
+      padding: 16px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 13px;
+      font-weight: 400;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      white-space: pre-wrap;
+      color: rgba(255,255,255,0.8);
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .log-content.show {
+      display: block;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: rgba(255,255,255,0.5);
+    }
+    .empty-state span {
+      font-size: 48px;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    /* Desktop Adjustments */
+    @media (min-width: 768px) {
+      .main-content {
+        padding: 40px 24px;
+      }
+      .result-price {
+        font-size: 64px;
+      }
+      .form-card {
+        padding: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-content">
+      <div class="logo">
+        <div class="logo-icon">🚗</div>
+        <h1 class="app-title">מחירון רכב</h1>
+      </div>
+      <div class="badge" id="status">מתחבר...</div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- Result Card -->
+    <div class="result-card">
+      <div class="result-label" id="hint">הכנס פרטי רכב וקבל הערכת מחיר</div>
+      <div class="result-price" id="price">—</div>
+    </div>
+
+    <!-- Form -->
+    <form id="form">
+      <div class="form-card">
+        <div class="section-title"><span>📅</span> שנה וקילומטראז׳</div>
+        <div class="form-grid">
+          <div class="field full">
+            <div class="field-label">שנת ייצור</div>
+            <div class="range-container">
+              <div class="range-display" id="yearVal">2019</div>
+              <input id="yearRange" type="range" min="2010" max="2025" value="2019">
+            </div>
+            <input name="year" id="year" type="number" value="2019" min="1990" max="2026" required>
+          </div>
+          <div class="field full">
+            <div class="field-label">קילומטראז׳</div>
+            <div class="range-container">
+              <div class="range-display" id="kmVal">60,000</div>
+              <input id="kmRange" type="range" min="0" max="250000" step="5000" value="60000">
+            </div>
+            <input name="km" id="km" type="number" value="60000" min="0" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="section-title"><span>🚙</span> פרטי הרכב</div>
+        <div class="form-grid">
+          <div class="form-row">
+            <div class="field">
+              <div class="field-label">יצרן</div>
+              <select name="brand" id="brand" required>
+                <option value="Toyota">Toyota</option>
+                <option value="Hyundai">Hyundai</option>
+                <option value="Kia">Kia</option>
+                <option value="Skoda">Skoda</option>
+                <option value="Mazda" selected>Mazda</option>
+                <option value="Volkswagen">Volkswagen</option>
+                <option value="Nissan">Nissan</option>
+                <option value="Honda">Honda</option>
+                <option value="Ford">Ford</option>
+                <option value="BMW">BMW</option>
+                <option value="Mercedes">Mercedes</option>
+              </select>
+            </div>
+            <div class="field">
+              <div class="field-label">דגם</div>
+              <select name="model" id="model" required></select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <div class="field-label">נפח מנוע (סמ״ק)</div>
+              <input name="engine_size" id="engine_size" type="number" value="2000" min="800" required>
+            </div>
+            <div class="field">
+              <div class="field-label">תיבת הילוכים</div>
+              <select name="gear" id="gear" required>
+                <option value="Automatic">אוטומט</option>
+                <option value="Manual">ידני</option>
+              </select>
+            </div>
+          </div>
+          <div class="field full">
+            <div class="field-label">מספר בעלים (יד)</div>
+            <input name="owners" id="owners" type="number" value="2" min="0" max="10" required>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" id="btn">
+        חשב מחיר משוער
+      </button>
+    </form>
+
+    <!-- Similar Cars -->
+    <div class="similar-section" id="similarList"></div>
+
+    <!-- Log Section -->
+    <div class="log-section">
+      <button type="button" class="log-toggle" onclick="toggleLog()">
+        📋 הצג לוג טכני
+      </button>
+      <div class="log-content" id="log">ממתין לפעולה...</div>
+    </div>
+  </main>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const API = "";
+
+const MODELS_BY_BRAND = {
+  "Toyota": ["Corolla", "Yaris"],
+  "Hyundai": ["Ioniq", "Elantra"],
+  "Kia": ["Picanto", "Rio"],
+  "Skoda": ["Octavia", "Rapid"],
+  "Mazda": ["3", "2"],
+  "Volkswagen": ["Golf", "Polo"],
+  "Nissan": ["Qashqai", "Sentra"],
+  "Honda": ["Civic", "Jazz"],
+  "Ford": ["Focus", "Fiesta"],
+  "BMW": ["320i"],
+  "Mercedes": ["C200"]
+};
+
+function updateModels() {
+  const brand = $("#brand").value;
+  const modelSelect = $("#model");
+  const models = MODELS_BY_BRAND[brand] || [];
+  modelSelect.innerHTML = models.map(m => `<option value="${m}">${m}</option>`).join("");
+}
+
+$("#brand").addEventListener("change", updateModels);
+updateModels();
+
+function toggleLog() {
+  $("#log").classList.toggle("show");
+}
+
+function formatILS(n) {
+  try {
+    return new Intl.NumberFormat('he-IL', { style: 'currency', currency: 'ILS', maximumFractionDigits: 0 }).format(n);
+  } catch {
+    return `${Math.round(n).toLocaleString()} ₪`;
+  }
+}
+
+function formatNum(n) { return Number(n).toLocaleString('en-US'); }
+
+async function checkHealth() {
+  try {
+    const r = await fetch(`${API}/health`);
+    if (!r.ok) throw new Error("bad status");
+    $("#status").textContent = "מחובר";
+    $("#status").style.background = "rgba(0, 212, 170, 0.1)";
+    $("#status").style.borderColor = "rgba(0, 212, 170, 0.3)";
+    $("#status").style.color = "#00d4aa";
+  } catch (e) {
+    $("#status").textContent = "לא מחובר";
+    $("#status").style.background = "rgba(239, 68, 68, 0.1)";
+    $("#status").style.borderColor = "rgba(239, 68, 68, 0.3)";
+    $("#status").style.color = "#ef4444";
+  }
+}
+
+function animateNumber(el, from, to, ms = 700) {
+  const start = performance.now();
+  function tick(t) {
+    const p = Math.min(1, (t - start) / ms);
+    const v = from + (to - from) * (1 - Math.pow(1 - p, 3));
+    el.textContent = formatILS(v);
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function payloadFromForm() {
+  return {
+    year: Number($("#year").value),
+    km: Number($("#km").value),
+    brand: $("#brand").value.trim(),
+    model: $("#model").value.trim(),
+    engine_size: Number($("#engine_size").value),
+    gear: $("#gear").value,
+    owners: Number($("#owners").value),
+  };
+}
+
+function setSimilar(items) {
+  const box = $("#similarList");
+  box.innerHTML = "";
+  if (!items || !items.length) {
+    box.innerHTML = `<div class="empty-state"><span>🔍</span>לא נמצאו רכבים דומים</div>`;
+    return;
+  }
+
+  box.innerHTML = `<div class="section-title"><span>📊</span> רכבים דומים</div>`;
+  items.forEach(it => {
+    const title = `${it.brand} ${it.model} • ${it.year}`;
+    const meta = `${formatNum(it.km)} ק״מ • ${it.engine_size}cc • יד ${it.owners}`;
+    const price = it.price != null ? formatILS(it.price) : "—";
+    box.insertAdjacentHTML("beforeend", `
+      <div class="car-card">
+        <div class="car-info">
+          <h3>${title}</h3>
+          <div class="car-meta">${meta}</div>
+        </div>
+        <div class="car-price">${price}</div>
+      </div>
+    `);
+  });
+}
+
+function bindRanges() {
+  const yearR = $("#yearRange"), year = $("#year"), yearVal = $("#yearVal");
+  const kmR = $("#kmRange"), km = $("#km"), kmVal = $("#kmVal");
+
+  const syncYear = (v) => { year.value = v; yearR.value = v; yearVal.textContent = v; };
+  const syncKm = (v) => { km.value = v; kmR.value = v; kmVal.textContent = formatNum(v); };
+
+  yearR.addEventListener("input", () => syncYear(yearR.value));
+  year.addEventListener("input", () => syncYear(year.value));
+
+  kmR.addEventListener("input", () => syncKm(kmR.value));
+  km.addEventListener("input", () => syncKm(km.value));
+
+  syncYear(year.value);
+  syncKm(km.value);
+}
+
+$("#form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const btn = $("#btn");
+  const log = $("#log");
+  const hint = $("#hint");
+  const priceEl = $("#price");
+
+  const payload = payloadFromForm();
+
+  btn.disabled = true;
+  btn.innerHTML = `מחשב... <span class="spin"></span>`;
+  hint.textContent = "מעבד את הבקשה...";
+  priceEl.textContent = "—";
+  $("#similarList").innerHTML = "";
+  log.textContent = "POST /predict\n" + JSON.stringify(payload, null, 2);
+
+  try {
+    const r1 = await fetch(`${API}/predict`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const d1 = await r1.json();
+    if (!r1.ok) throw new Error(JSON.stringify(d1));
+
+    hint.textContent = "מחיר משוער:";
+    animateNumber(priceEl, 0, d1.predicted_price, 800);
+
+    log.textContent += "\n\nResponse /predict:\n" + JSON.stringify(d1, null, 2);
+
+    const r2 = await fetch(`${API}/similar`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const d2 = await r2.json();
+    if (r2.ok) setSimilar(d2.items);
+    else log.textContent += "\n\nResponse /similar ERROR:\n" + JSON.stringify(d2, null, 2);
+
+  } catch (err) {
+    hint.textContent = "שגיאה:";
+    priceEl.textContent = "—";
+    log.textContent += "\n\nERROR:\n" + String(err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "חשב מחיר משוער";
+  }
+});
+
+bindRanges();
+checkHealth();
+</script>
+</body>
+</html>
