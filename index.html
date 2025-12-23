@@ -402,30 +402,221 @@
       margin-bottom: 12px;
     }
 
-    /* Share Section */
-    .share-section {
-      margin-top: 20px;
+    /* Floating Buttons */
+    .floating-buttons {
+      position: fixed;
+      bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 1000;
     }
-    .whatsapp-btn {
+    .float-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .float-btn:active {
+      transform: scale(0.95);
+    }
+    .whatsapp-float {
+      background: #25D366;
+      color: #fff;
+      right: 24px;
+      position: fixed;
+      bottom: 24px;
+    }
+    .accessibility-btn {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.3);
+      left: 24px;
+      position: fixed;
+      bottom: 24px;
+    }
+    .accessibility-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* Share Modal */
+    .share-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .share-modal.show {
+      display: flex;
+    }
+    .share-modal-content {
+      background: #1a1f2e;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 400px;
+      overflow: hidden;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .share-modal-header {
+      padding: 20px 24px;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      width: 100%;
-      padding: 16px;
-      font-size: 17px;
-      font-weight: 700;
-      font-family: inherit;
-      text-decoration: none;
-      border-radius: 16px;
-      background: #25D366;
-      color: #fff;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      position: relative;
     }
-    .whatsapp-btn:active {
+    .share-modal-header h3 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .share-close {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.6);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px;
+    }
+    .share-option {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 24px;
+      text-decoration: none;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.1);
+      margin: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.03);
+      transition: all 0.2s ease;
+    }
+    .share-option:active {
+      background: rgba(255,255,255,0.08);
       transform: scale(0.98);
-      background: #1da851;
+    }
+    .share-option-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .share-option-icon.contacts {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+    }
+    .share-option-icon.number {
+      background: linear-gradient(135deg, #25D366, #075E54);
+    }
+    .share-option-icon.site {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      border: 1px solid #25D366;
+      color: #25D366;
+    }
+    .share-option-text {
+      flex: 1;
+    }
+    .share-option-text strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+    .share-option-text span {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      font-weight: 400;
+    }
+
+    /* Accessibility Panel */
+    .accessibility-panel {
+      display: none;
+      position: fixed;
+      bottom: 100px;
+      left: 24px;
+      background: #1a1f2e;
+      border-radius: 16px;
+      padding: 16px;
+      z-index: 1500;
+      min-width: 200px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .accessibility-panel.show {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+    .accessibility-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .accessibility-header h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+    .accessibility-header button {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .accessibility-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .accessibility-options button {
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: right;
+      transition: all 0.2s ease;
+    }
+    .accessibility-options button:active {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* High Contrast Mode */
+    body.high-contrast {
+      background: #000 !important;
+    }
+    body.high-contrast * {
+      border-color: #fff !important;
     }
 
     /* Desktop Adjustments */
@@ -537,14 +728,7 @@
     <!-- Similar Cars -->
     <div class="similar-section" id="similarList"></div>
 
-    <!-- Share Button -->
-    <div class="share-section" id="shareSection" style="display:none;">
-      <a id="whatsappShare" class="whatsapp-btn" target="_blank">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        שתף בוואטסאפ
-      </a>
-    </div>
-
+    
     <!-- Log Section -->
     <div class="log-section">
       <button type="button" class="log-toggle" onclick="toggleLog()">
@@ -553,6 +737,74 @@
       <div class="log-content" id="log">ממתין לפעולה...</div>
     </div>
   </main>
+
+  <!-- Floating Buttons -->
+  <div class="floating-buttons">
+    <!-- Accessibility Button -->
+    <button class="float-btn accessibility-btn" onclick="toggleAccessibility()" title="נגישות">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></svg>
+    </button>
+
+    <!-- WhatsApp Button -->
+    <button class="float-btn whatsapp-float" id="whatsappFloatBtn" onclick="toggleShareMenu()">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </button>
+  </div>
+
+  <!-- Share Modal -->
+  <div class="share-modal" id="shareModal">
+    <div class="share-modal-content">
+      <div class="share-modal-header">
+        <h3>שתפו את האתר</h3>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <button class="share-close" onclick="toggleShareMenu()">✕</button>
+      </div>
+
+      <a class="share-option" id="shareContacts" href="#" target="_blank">
+        <div class="share-option-icon contacts">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </div>
+        <div class="share-option-text">
+          <strong>שתפו באנשי קשר</strong>
+          <span>שלחו לחברים מרשימת אנשי הקשר</span>
+        </div>
+      </a>
+
+      <a class="share-option" id="shareNumber" href="#" onclick="shareToNumber(event)">
+        <div class="share-option-icon number">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </div>
+        <div class="share-option-text">
+          <strong>שלחו למספר ספציפי</strong>
+          <span>הזינו מספר טלפון ושתפו</span>
+        </div>
+      </a>
+
+      <a class="share-option" href="https://djorens.co.il" target="_blank">
+        <div class="share-option-icon site">
+          <span style="font-weight:900;font-size:12px;">OREN<br>SHAFFER</span>
+        </div>
+        <div class="share-option-text">
+          <strong style="color:#25D366;">DJ Oren Shaffer</strong>
+          <span>djorens.co.il</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Accessibility Panel -->
+  <div class="accessibility-panel" id="accessibilityPanel">
+    <div class="accessibility-header">
+      <h3>נגישות</h3>
+      <button onclick="toggleAccessibility()">✕</button>
+    </div>
+    <div class="accessibility-options">
+      <button onclick="changeFontSize(1)">A+ הגדל טקסט</button>
+      <button onclick="changeFontSize(-1)">A- הקטן טקסט</button>
+      <button onclick="toggleHighContrast()">ניגודיות גבוהה</button>
+      <button onclick="resetAccessibility()">איפוס</button>
+    </div>
+  </div>
 
 <script>
 const $ = (s) => document.querySelector(s);
@@ -705,13 +957,6 @@ $("#form").addEventListener("submit", async (e) => {
     hint.textContent = "מחיר משוער:";
     animateNumber(priceEl, 0, d1.predicted_price, 800);
 
-    // Show WhatsApp share button
-    const shareSection = $("#shareSection");
-    shareSection.style.display = "block";
-    const whatsappLink = $("#whatsappShare");
-    const shareText = `🚗 בדקתי מחיר רכב:\n${payload.brand} ${payload.model} ${payload.year}\n${formatNum(payload.km)} ק"מ\n\n💰 מחיר משוער: ${formatILS(d1.predicted_price)}\n\nבדוק גם את הרכב שלך:\nhttps://carscheck-1.onrender.com`;
-    whatsappLink.href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-
     log.textContent += "\n\nResponse /predict:\n" + JSON.stringify(d1, null, 2);
 
     const r2 = await fetch(`${API}/similar`, {
@@ -735,6 +980,59 @@ $("#form").addEventListener("submit", async (e) => {
 
 bindRanges();
 checkHealth();
+
+// Share Menu Functions
+function toggleShareMenu() {
+  const modal = $("#shareModal");
+  modal.classList.toggle("show");
+  updateShareLinks();
+}
+
+function updateShareLinks() {
+  const shareText = `בדוק כמה שווה הרכב שלך!\nhttps://carscheck-1.onrender.com`;
+  $("#shareContacts").href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+}
+
+function shareToNumber(e) {
+  e.preventDefault();
+  const phone = prompt("הזן מספר טלפון (לדוגמה: 0501234567):");
+  if (phone) {
+    const cleanPhone = phone.replace(/\D/g, '');
+    const intlPhone = cleanPhone.startsWith('0') ? '972' + cleanPhone.slice(1) : cleanPhone;
+    const shareText = `בדוק כמה שווה הרכב שלך!\nhttps://carscheck-1.onrender.com`;
+    window.open(`https://wa.me/${intlPhone}?text=${encodeURIComponent(shareText)}`, '_blank');
+  }
+}
+
+// Close modal when clicking outside
+$("#shareModal").addEventListener("click", (e) => {
+  if (e.target === $("#shareModal")) {
+    toggleShareMenu();
+  }
+});
+
+// Accessibility Functions
+let currentFontSize = 100;
+
+function toggleAccessibility() {
+  $("#accessibilityPanel").classList.toggle("show");
+}
+
+function changeFontSize(delta) {
+  currentFontSize += delta * 10;
+  currentFontSize = Math.max(80, Math.min(150, currentFontSize));
+  document.body.style.fontSize = currentFontSize + '%';
+}
+
+function toggleHighContrast() {
+  document.body.classList.toggle("high-contrast");
+}
+
+function resetAccessibility() {
+  currentFontSize = 100;
+  document.body.style.fontSize = '100%';
+  document.body.classList.remove("high-contrast");
+}
 </script>
 </body>
 </html>
