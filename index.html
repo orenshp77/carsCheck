@@ -677,17 +677,22 @@
             <div class="field">
               <div class="field-label">יצרן</div>
               <select name="brand" id="brand" required>
-                <option value="Toyota">Toyota</option>
+                <option value="Toyota" selected>Toyota</option>
                 <option value="Hyundai">Hyundai</option>
                 <option value="Kia">Kia</option>
                 <option value="Skoda">Skoda</option>
-                <option value="Mazda" selected>Mazda</option>
+                <option value="Mazda">Mazda</option>
                 <option value="Volkswagen">Volkswagen</option>
                 <option value="Nissan">Nissan</option>
                 <option value="Honda">Honda</option>
                 <option value="Ford">Ford</option>
                 <option value="BMW">BMW</option>
                 <option value="Mercedes">Mercedes</option>
+                <option value="Suzuki">Suzuki</option>
+                <option value="Seat">Seat</option>
+                <option value="Citroen">Citroen</option>
+                <option value="Peugeot">Peugeot</option>
+                <option value="Renault">Renault</option>
               </select>
             </div>
             <div class="field">
@@ -798,16 +803,21 @@ const API = "";
 
 const MODELS_BY_BRAND = {
   "Toyota": ["Corolla", "Yaris"],
-  "Hyundai": ["Ioniq", "Elantra"],
-  "Kia": ["Picanto", "Rio"],
+  "Hyundai": ["i20", "Ioniq", "Elantra", "Tucson"],
+  "Kia": ["Picanto", "Rio", "Sportage"],
   "Skoda": ["Octavia", "Rapid"],
-  "Mazda": ["3", "2"],
+  "Mazda": ["3", "2", "CX-5"],
   "Volkswagen": ["Golf", "Polo"],
   "Nissan": ["Qashqai", "Sentra"],
-  "Honda": ["Civic", "Jazz"],
+  "Honda": ["Civic", "Jazz", "HR-V"],
   "Ford": ["Focus", "Fiesta"],
   "BMW": ["320i"],
-  "Mercedes": ["C200"]
+  "Mercedes": ["C200"],
+  "Suzuki": ["Swift", "Vitara"],
+  "Seat": ["Ibiza", "Leon"],
+  "Citroen": ["C3"],
+  "Peugeot": ["208", "2008"],
+  "Renault": ["Clio", "Captur"]
 };
 
 function updateModels() {
